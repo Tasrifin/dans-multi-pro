@@ -3,6 +3,7 @@ package main
 import (
 	"dans-multi-pro/config"
 	"dans-multi-pro/controllers"
+	"dans-multi-pro/middlewares"
 	"dans-multi-pro/repositories"
 	"dans-multi-pro/services"
 
@@ -18,11 +19,20 @@ func main() {
 	userService := services.NewUserService(userRepo)
 	userController := controllers.NewUserController(userService)
 
+	// job
+	jobRepo := repositories.NewJobRepo(db)
+	jobService := services.NewJobService(jobRepo)
+	jobController := controllers.NewJobController(jobService)
+
 	// route
-	userRouter := route.Group("/users")
+	route.POST("/register", userController.UserRegister)
+	route.POST("/login", userController.Login)
+
+	jobRouter := route.Group("/job")
 	{
-		userRouter.POST("/register", userController.UserRegister)
-		userRouter.POST("/login", userController.Login)
+		jobRouter.Use(middlewares.Auth())
+		jobRouter.GET("/list", jobController.GetJobList)
+		jobRouter.GET("/detail/:detailID", jobController.GetJobDetail)
 	}
 
 	route.Run(config.APP_PORT)

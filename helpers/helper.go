@@ -2,6 +2,8 @@ package helpers
 
 import (
 	"errors"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
@@ -57,4 +59,19 @@ func VerifyToken(tokenString string) (interface{}, error) {
 	}
 
 	return token.Claims.(jwt.MapClaims), nil
+}
+
+func FetchAPI(url string) ([]byte, error) {
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
 }

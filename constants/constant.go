@@ -1,7 +1,10 @@
 package constants
 
 const (
-	API_DANS = "http://dev3.dansmultipro.co.id/api/recruitment/positions.json"
+	API_LIST   = "http://dev3.dansmultipro.co.id/api/recruitment/positions.json"
+	API_DETAIL = "http://dev3.dansmultipro.co.id/api/recruitment/positions"
 
-	FullTime = "Full Time"
+	FULL_TIME = "Full Time"
+
+	PER_PAGE = 10
 )
